@@ -9,7 +9,7 @@ const {
 
 (async () => {
   try {
-    const getContasts = async (req, res, next) => {
+    const getContasts = async (req, res) => {
       const contacts = await listContacts();
       res.json({
         status: 200,
@@ -19,7 +19,7 @@ const {
       });
     };
 
-    const getById = async (req, res, next) => {
+    const getById = async (req, res) => {
       const { contactId } = req.params;
       const contactById = await getContactById(contactId);
 
@@ -39,7 +39,7 @@ const {
       });
     };
 
-    const createContact = async (req, res, next) => {
+    const createContact = async (req, res) => {
       const body = req.body;
 
       const { error } = schema.validate(req.body);
@@ -60,7 +60,7 @@ const {
       }
     };
 
-    const deleteContact = async (req, res, next) => {
+    const deleteContact = async (req, res) => {
       const { contactId } = req.params;
       const contact = await removeContact(contactId);
 
@@ -80,7 +80,7 @@ const {
       });
     };
 
-    const upgradeContact = async (req, res, next) => {
+    const upgradeContact = async (req, res) => {
       const { contactId } = req.params;
       const body = req.body;
 
