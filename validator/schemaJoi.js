@@ -10,6 +10,8 @@ const schema = Joi.object({
     .required(),
 
   phone: Joi.string().min(10).max(20).required(),
+
+  favorite: Joi.boolean().default(false),
 });
 
 module.exports = {
