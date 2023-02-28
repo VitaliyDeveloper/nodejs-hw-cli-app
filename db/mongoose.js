@@ -6,11 +6,7 @@ async function getConnection() {
 
   const uri = getConnectionURI();
   // console.log(uri);
-  try {
-    await mongoose.connect(uri);
-  } catch (error) {
-    console.log(error);
-  }
+  return mongoose.connect(uri);
 }
 
 module.exports = getConnection;

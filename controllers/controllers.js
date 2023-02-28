@@ -109,23 +109,27 @@ const { Contacts } = require("../models/contacts");
     // //PATCH/////////////////////////////////
     const updateStatusContact = async (req, res) => {
       const { contactId } = req.params;
-      const body = req.body;
-
-      const { error } = schema.validate(body);
-
-      if (error) {
+      const { favorite } = req.body;
+      const result = await Contacts.findByIdAndUpdate(
+        contactId,
+        { favorite },
+        {
+          new: true,
+        }
+      );
+      console.log(result);
+      if (!result) {
         res.json({
           status: 400,
           code: 400,
           message: "missing field favorite",
         });
-      } else if (!error) {
-        const contact = Contacts.updateOne({ _id: contactId }, body);
+      } else if (result) {
         res.json({
           status: "success",
           code: 200,
           message: "Contact update",
-          data: { contact },
+          data: { result },
         });
       } else {
         res.json({
