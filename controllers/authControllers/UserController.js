@@ -1,5 +1,5 @@
 class UserController {
-  static async contacts(req, res, next) {}
+  static async list(req, res, next) {}
 }
 
 module.exports = UserController;

@@ -1,21 +1,32 @@
 const express = require("express");
 const router = express.Router();
-const controllers = require("../../controllers/contactsControllers");
-const authControllers = require("../../controllers/authControllers");
+// const controllers = require("../../controllers/contactsControllers");
+// const authControllers = require("../../controllers/authControllers");
+const {
+  AuthController,
+} = require("../../controllers/authControllers/AuthController");
+const {
+  UserController,
+} = require("../../controllers/authControllers/UserController");
 
-router.post("./login", authControllers.AuthController.login);
-router.post(
-  "./registration",
-  authControllers,
-  authControllers.AuthController.registration
-);
-router.get("./list", authControllers.UserController.contacts);
+const {
+  getContacts,
+  getById,
+  createContact,
+  deleteContact,
+  updateContact,
+  updateStatusContact,
+} = require("../../controllers/contactsControllers/controllers");
 
-router.get("/", controllers.getContacts);
-router.get("/:contactId", controllers.getById);
-router.post("/", controllers.createContact);
-router.delete("/:contactId", controllers.deleteContact);
-router.put("/:contactId", controllers.updateContact);
-router.patch("/:contactId/favorite", controllers.updateStatusContact);
+router.post("./login", AuthController);
+router.post("./registration", AuthController);
+router.get("./list", UserController);
+
+router.get("/", getContacts);
+router.get("/:contactId", getById);
+router.post("/", createContact);
+router.delete("/:contactId", deleteContact);
+router.put("/:contactId", updateContact);
+router.patch("/:contactId/favorite", updateStatusContact);
 
 module.exports = router;
