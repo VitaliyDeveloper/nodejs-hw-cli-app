@@ -3,9 +3,13 @@ const router = express.Router();
 const controllers = require("../../controllers/contactsControllers");
 const authControllers = require("../../controllers/authControllers");
 
-router.post("./login", authControllers.AuthController);
-router.post("./registration", authControllers, authControllers.AuthController);
-router.get("./contacts", authControllers.UserController);
+router.post("./login", authControllers.AuthController.login);
+router.post(
+  "./registration",
+  authControllers,
+  authControllers.AuthController.registration
+);
+router.get("./list", authControllers.UserController.contacts);
 
 router.get("/", controllers.getContacts);
 router.get("/:contactId", controllers.getById);
