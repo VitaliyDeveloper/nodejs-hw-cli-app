@@ -1,5 +1,5 @@
-const { schema } = require("../validator/schemaJoi");
-const { Contacts } = require("../models/contacts");
+const { schema } = require("../../validator/schemaJoi");
+const { Contacts } = require("../../models/contacts");
 
 (async () => {
   try {

@@ -1,10 +1,11 @@
-const { Contacts } = require("../models/contacts");
+const { Contacts } = require("../../models/contacts");
 
-const deleteContact = async (req, res) => {
+const getById = async (req, res) => {
   try {
     const { contactId } = req.params;
-    const contact = await Contacts.deleteOne({ _id: contactId });
-    if (!contact) {
+    const contactById = await Contacts.findById({ _id: contactId });
+
+    if (!contactById) {
       return res.json({
         status: "failure",
         code: 404,
@@ -15,12 +16,12 @@ const deleteContact = async (req, res) => {
     res.json({
       status: "success",
       code: 200,
-      message: "contact deleted",
-      data: { contact },
+      message: "Contact by Id",
+      data: { contactById },
     });
   } catch (error) {
     console.log(error);
   }
 };
 
-module.exports = { deleteContact };
+module.exports = { getById };
