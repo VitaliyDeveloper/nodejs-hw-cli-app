@@ -1,6 +1,7 @@
 class UserController {
   static async list(req, res, next) {
     const { username } = req.user;
+
     res.json({
       status: "success",
       code: 200,

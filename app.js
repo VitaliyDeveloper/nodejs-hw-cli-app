@@ -13,18 +13,17 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+require("./config/configPassport");
 
 app.use("/api/contacts", routerApi.contacts);
 app.use("/api/auth", routerApi.auth);
 app.use("/api/users", auth, routerApi.users);
 
-require("./config/configPassport");
-
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ code: 404, message: "Not found" });
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, __) => {
   res.status(500).json({ code: 500, message: err.message });
 });
 
