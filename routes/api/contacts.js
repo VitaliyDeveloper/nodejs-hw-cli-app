@@ -2,12 +2,12 @@ const express = require("express");
 const router = express.Router();
 // const controllers = require("../../controllers/contactsControllers");
 // const authControllers = require("../../controllers/authControllers");
-const {
-  AuthController,
-} = require("../../controllers/authControllers/AuthController");
-const {
-  UserController,
-} = require("../../controllers/authControllers/UserController");
+// const {
+//   AuthController,
+// } = require("../../controllers/authControllers/AuthController");
+// const {
+//   UserController,
+// } = require("../../controllers/authControllers/UserController");
 
 const {
   getContacts,
@@ -18,9 +18,9 @@ const {
   updateStatusContact,
 } = require("../../controllers/contactsControllers/controllers");
 
-router.post("./login", AuthController);
-router.post("./registration", AuthController);
-router.get("./list", UserController);
+// router.post("./login", AuthController);
+// router.post("./registration", AuthController);
+// router.get("./list", UserController);
 
 router.get("/", getContacts);
 router.get("/:contactId", getById);
