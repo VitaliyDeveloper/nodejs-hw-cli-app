@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const routerApi = require("./routes/api");
 
-const auth = require("./middlewaries/auth");
+const auth = require("./middlewaries");
 
 const app = express();
 
