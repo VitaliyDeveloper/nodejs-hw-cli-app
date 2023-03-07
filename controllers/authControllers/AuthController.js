@@ -1,11 +1,37 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-// const SECRET = process.env.SECRET;
-const { token } = require("morgan");
+const secret = process.env.SECRET;
 const User = require("../../schemas/user");
 
 class AuthController {
-  static async login(req, res, next) {}
+  static async login(req, res, next) {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user || !user.validPassword(password)) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Incorrect login or password",
+        data: "Bad request",
+      });
+    }
+
+    const { _id: id, username } = user;
+
+    const token = await jwt.sign({ id, username }, secret, { expiresIn: "1h" });
+
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        token,
+      },
+    });
+
+    // console.log(token);
+  }
 
   static async registration(req, res, next) {
     const { email, password, username } = req.body;
@@ -23,9 +49,7 @@ class AuthController {
     try {
       const newUser = new User({ username, email });
       newUser.setPassword(password);
-      const { _id: id } = await newUser.save();
-      jwt.sign({ id, username }, process.env.SECRET, { expiresIn: "3h" });
-      console.log(token);
+      await newUser.save();
 
       res.status(201).json({
         status: "success",

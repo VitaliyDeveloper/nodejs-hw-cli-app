@@ -18,6 +18,8 @@ app.use("/api/contacts", routerApi.contacts);
 app.use("/api/auth", routerApi.auth);
 app.use("/api/users", auth, routerApi.users);
 
+require("./config/configPassport");
+
 app.use((req, res) => {
   res.status(404).json({ code: 404, message: "Not found" });
 });
