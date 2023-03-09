@@ -6,8 +6,10 @@ class UserController {
       status: "success",
       code: 200,
       data: {
-        email,
-        subscription,
+        user: {
+          email,
+          subscription,
+        },
       },
     });
   }
