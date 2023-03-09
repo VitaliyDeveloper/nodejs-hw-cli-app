@@ -56,7 +56,7 @@ class AuthController {
 
   static async logout(req, res, next) {
     const { id } = req.user;
-    console.log(id);
+    // console.log(id);
 
     try {
       const user = await User.findById(id);

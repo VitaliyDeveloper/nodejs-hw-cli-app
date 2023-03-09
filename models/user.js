@@ -22,7 +22,6 @@ const userSchema = new Schema({
   token: {
     type: String,
     default: null,
-    // required: [true, "token required"],
   },
   owner: {
     type: Schema.Types.ObjectId,
