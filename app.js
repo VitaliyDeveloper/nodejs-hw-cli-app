@@ -16,7 +16,7 @@ app.use(express.json());
 require("./config/configPassport");
 
 app.use("/api/contacts", routerApi.contacts);
-app.use("/api/auth", routerApi.auth);
+app.use("/api/users", routerApi.auth);
 app.use("/api/users", auth, routerApi.users);
 
 app.use((_, res) => {

@@ -1,12 +1,13 @@
 class UserController {
-  static async list(req, res, next) {
-    const { username } = req.user;
+  static async current(req, res, next) {
+    const { email, subscription } = req.user;
 
     res.json({
       status: "success",
       code: 200,
       data: {
-        message: `Authorization was successful: ${username}`,
+        email,
+        subscription,
       },
     });
   }
