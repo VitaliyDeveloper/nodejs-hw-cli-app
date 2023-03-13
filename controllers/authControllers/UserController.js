@@ -1,6 +1,6 @@
 class UserController {
   static async current(req, res, next) {
-    const { email, subscription } = req.user;
+    const { email, subscription, avatarURL } = req.user;
 
     res.json({
       status: "success",
@@ -9,6 +9,7 @@ class UserController {
         user: {
           email,
           subscription,
+          avatarURL,
         },
       },
     });
