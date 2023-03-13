@@ -18,6 +18,8 @@ const schema = Joi.object({
   token: Joi.string(),
 
   owner: Joi.string(),
+
+  avatarURL: Joi.string(),
 });
 
 module.exports = {

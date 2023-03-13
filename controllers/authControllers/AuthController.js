@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 require("dotenv").config();
 const secret = process.env.SECRET;
 const User = require("../../models/user");
@@ -76,7 +77,7 @@ class AuthController {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
+    const avatarURL = gravatar.url(email);
     const { error } = schema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -104,6 +105,7 @@ class AuthController {
             user: {
               email,
               subscription,
+              avatarURL,
             },
           },
         });
