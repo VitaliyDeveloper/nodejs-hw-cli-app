@@ -2,8 +2,14 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 require("dotenv").config();
 const secret = process.env.SECRET;
+const emailFrom = process.env.EMAIL_FROM;
+const sgMail = require("@sendgrid/mail");
+const { nanoid } = require("nanoid");
+
 const User = require("../../models/user");
 const { schema } = require("../../validator/schemsJoiUsers");
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 class AuthController {
   static async login(req, res, next) {
@@ -77,7 +83,6 @@ class AuthController {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    const avatarURL = gravatar.url(email);
     const { error } = schema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -94,10 +99,24 @@ class AuthController {
         });
       }
       try {
-        const newUser = new User({ email });
+        const verificationToken = nanoid();
+        const verificationLink = `users/verify/${verificationToken}`;
+        const avatarURL = gravatar.url(email, {
+          s: "250",
+          r: "pg",
+          d: "identicon",
+        });
+        const newUser = new User({ email, avatarURL, verificationToken });
+        const { subscription } = newUser;
         newUser.setPassword(password);
         await newUser.save();
-        const { subscription } = newUser;
+        await sgMail.send({
+          to: email,
+          from: emailFrom,
+          subject: "Email Verification",
+          text: `Please click on this link to verify your email: ${verificationLink}`,
+        });
+
         res.status(201).json({
           code: 201,
           message: "success",
@@ -112,6 +131,59 @@ class AuthController {
       } catch (error) {
         next(error);
       }
+    }
+  }
+
+  static async verify(req, res, next) {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res
+          .status(400)
+          .json({ message: "missing required field email" });
+      }
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      if (user.verify) {
+        return res
+          .status(400)
+          .json({ message: "Verification has already been passed" });
+      }
+      const verificationToken = nanoid();
+      const verificationLink = `users/verify/${verificationToken}`;
+      user.verificationToken = verificationToken;
+      await user.save();
+
+      await sgMail.send({
+        to: email,
+        from: emailFrom,
+        subject: "Email Verification",
+        text: `Please click on this link to verify your email: ${verificationLink}`,
+      });
+      return res.json({ message: "Verification email sent successfully" });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Server Error" });
+    }
+  }
+
+  static async verifyToken(req, res) {
+    try {
+      const user = await User.findOne({
+        verificationToken: req.params.verificationToken,
+      });
+      if (!user) {
+        return res.status(404).json({ error: "Not Found" });
+      }
+      user.verificationToken = null;
+      user.verify = true;
+      await user.save();
+      return res.json({ message: "Verification Successful" });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Server Error" });
     }
   }
 }

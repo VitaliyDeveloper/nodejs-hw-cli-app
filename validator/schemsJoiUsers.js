@@ -20,6 +20,10 @@ const schema = Joi.object({
   owner: Joi.string(),
 
   avatarURL: Joi.string(),
+
+  verify: Joi.string(),
+
+  verificationToken: Joi.string(),
 });
 
 module.exports = {
